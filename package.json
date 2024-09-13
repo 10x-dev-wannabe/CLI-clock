@@ -1,5 +1,15 @@
 {
+  "bin": {
+  "cliTimer": "./bin/main.js"
+  },
   "dependencies": {
     "yargs": "^17.7.2"
-  }
+  },
+  "name": "cliTimer",
+  "version": "1.0.0",
+  "description": "Simple cli clock, chronometer and timer",
+  "main": "bin/main.js",
+  "author": "dev10x <dev10xattempt@yahoo.com>",
+  "license": "MIT",
+  "private": false
 }
