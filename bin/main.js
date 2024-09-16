@@ -2,10 +2,13 @@
 
 var argv = require('yargs/yargs')(process.argv.slice(2))
   .option('k', {
-    "describe" : "prints a sipmle chronometer"
+    "describe" : "sipmle chronometer"
   })
   .option('c', {
-    "describe" : "prints a simple clock"
+    "describe" : "simple clock showing current time"
+  })
+  .option('t', {
+    "describe" : "simple countdown timer"
   })
   .argv;
 
@@ -15,10 +18,7 @@ let t = 0;
 let h;
 let m;
 let s;
-
-function clearLine() {
-  process.stdout.write('\r\x1b[K')  
-};
+let time;
 
 function formatAndPrintHMS(time) {
     h = Math.trunc(time/3600);
@@ -28,7 +28,7 @@ function formatAndPrintHMS(time) {
     h = (h < 10) ? "0"+h : h;
     m = (m < 10) ? "0"+m : m;
     s = (s < 10) ? "0"+s : s;
-    clearLine(); 
+    process.stdout.write('\r\x1b[K')  
     process.stdout.write(`${h}:${m}:${s}`)
 }
 
@@ -53,3 +53,20 @@ if (argv.c === true) {
     formatAndPrintHMS(t);
   }, 1000);
 };
+
+//timer function
+if (argv.t >= 0) {
+  t = argv.t * 60;
+  if (argv._[0] != undefined){
+    t += argv._[0];
+  };
+  let clock = setInterval(() => {
+    t -= 1;
+    formatAndPrintHMS(t); 
+    if (t <= 0) {
+      clearInterval(clock);
+      console.log('\n') 
+      console.log(Date()) 
+    } 
+  }, 1000);
+}
