@@ -14,8 +14,6 @@ var argv = require('yargs/yargs')(process.argv.slice(2))
   })
   .argv;
 
-console.log(argv);
-
 let t = 0;
 let h;
 let m;
@@ -61,7 +59,7 @@ if (argv.t === true) {
   t += readLine.questionInt('hours:   ')*3600;
   t += readLine.questionInt('minutes: ')*60; 
   t += readLine.questionInt('seconds: ');
-  console.log(t) 
+
   let clock = setInterval(() => {
     t -= 1;
     formatAndPrintHMS(t); 

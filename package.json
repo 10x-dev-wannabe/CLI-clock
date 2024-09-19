@@ -1,12 +1,12 @@
 {
   "bin": {
-    "cliTimer": "./bin/main.js"
+    "CLI-clock": "./bin/main.js"
   },
   "dependencies": {
     "readline-sync": "^1.4.10",
     "yargs": "^17.7.2"
   },
-  "name": "cliTimer",
+  "name": "CLI-clock",
   "version": "1.0.0",
   "description": "Simple cli clock, chronometer and timer",
   "main": "bin/main.js",
