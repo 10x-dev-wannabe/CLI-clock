@@ -1,8 +1,9 @@
 {
   "bin": {
-  "cliTimer": "./bin/main.js"
+    "cliTimer": "./bin/main.js"
   },
   "dependencies": {
+    "readline-sync": "^1.4.10",
     "yargs": "^17.7.2"
   },
   "name": "cliTimer",

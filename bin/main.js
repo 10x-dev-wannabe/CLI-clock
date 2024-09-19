@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+const readLine = require('readline-sync');
+
 var argv = require('yargs/yargs')(process.argv.slice(2))
   .option('k', {
     "describe" : "sipmle chronometer"
@@ -55,11 +57,11 @@ if (argv.c === true) {
 };
 
 //timer function
-if (argv.t >= 0) {
-  t = argv.t * 60;
-  if (argv._[0] != undefined){
-    t += argv._[0];
-  };
+if (argv.t === true) {
+  t += readLine.questionInt('hours:   ')*3600;
+  t += readLine.questionInt('minutes: ')*60; 
+  t += readLine.questionInt('seconds: ');
+  console.log(t) 
   let clock = setInterval(() => {
     t -= 1;
     formatAndPrintHMS(t); 
@@ -67,6 +69,6 @@ if (argv.t >= 0) {
       clearInterval(clock);
       console.log('\n') 
       console.log(Date()) 
-    } 
-  }, 1000);
+  }}, 1000);
+  
 }
