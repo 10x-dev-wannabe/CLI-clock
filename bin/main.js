@@ -15,6 +15,9 @@ var argv = require('yargs/yargs')(process.argv.slice(2))
   .option('s', {
     "describe" : "save time to a file specified after flag"
   })
+  .option('l', {
+    "describe" : "list all save files"
+  })
   .argv;
 
 let t = 0;
@@ -100,3 +103,8 @@ if (argv.s !== undefined && argv.s !== true){
   })
 };
 
+//List save files if -l flag is specified
+if (argv.l != undefined) {
+  fs.readdir(`${__dirname}/../data/`, (err, files) => {
+     console.log(files); 
+})};
