@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-const readLine = require('readline-sync');
 const fs = require('node:fs');
 
 var argv = require('yargs/yargs')(process.argv.slice(2))
@@ -76,21 +75,28 @@ if (argv.t === true) {
       clearInterval(clock);
       console.log('\n') 
       console.log(Date()) 
- 
-    }}, 1000);
-  };
+}}, 1000)};
 
+
+//Save file on exit if the -s flag is specified
 if (argv.s !== undefined && argv.s !== true){
   process.on('SIGINT', () => {
-    //Get total time, add current time.
-    let total = fs.readFileSync(`${__dirname}/../data/${argv.s}`, 'utf8');
-    total = total.substring(total.lastIndexOf('/')+1, total.lastIndexOf('|'));
-    total = Number(time) + Number(total);
-    //Write to file.
-    let d = new Date();
-    let data = `\n${formatAndPrintHMS(time)} |${formatAndPrintHMS(total)}/${total}| @ ${d.toDateString()}`;
-    fs.appendFileSync(`${__dirname}/../data/${argv.s}`, data)
+    try {
+      file = fs.readFileSync(`${__dirname}/../data/${argv.s}.json`); 
+      file = JSON.parse(file);
+      console.log(`\n writing to file "${argv.s}"`)
+    } catch {
+      console.log(`\n no file named "${argv.s}" found.`);
+      console.log(`creating new file.`) 
+      file = {total: 0};
+    }
+
+    a = Date.now();
+    file[a] = time;
+    file.total = file.total + time;
+    fs.writeFileSync(`${__dirname}/../data/${argv.s}.json`, JSON.stringify(file))
+    console.log(file);
     process.exit();
   })
-}
+};
 
