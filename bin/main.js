@@ -39,6 +39,13 @@ function formatAndPrintHMS(time) {
     process.stdout.write('\r\x1b[K')  
     process.stdout.write(`${h}:${m}:${s}`)
     return [h, m, s].join(':');
+};
+
+function HMStoSeconds(hhmmss) {
+  hms = String(hhmmss).split(":").map(Number); 
+  console.log(hms);
+  s = hms[0]*3600+hms[1]*60+hms[2];
+  return s;
 }
 
 console.log(Date());
@@ -91,12 +98,17 @@ if (argv.s !== undefined && argv.s !== true){
     } catch {
       console.log(`\n no file named "${argv.s}" found.`);
       console.log(`creating new file.`) 
-      file = {total: 0};
+      file = [];
     }
 
-    a = Date.now();
-    file[a] = time;
-    file.total = file.total + time;
+    a = new Date();
+    date = `${a.getDate()}/${a.getMonth()+1}/${a.getFullYear()}@${a.getHours()}:${a.getMinutes()}`;
+    try {
+      total = formatAndPrintHMS(HMStoSeconds(file.at(-1).Total) + time);
+    } catch {
+      total = `00:00:${time}`;
+    }
+    file.push({Date: date, Total: total, Time: formatAndPrintHMS(time)});
     fs.writeFileSync(`${__dirname}/../data/${argv.s}.json`, JSON.stringify(file))
     console.log(file);
     process.exit();
@@ -106,5 +118,6 @@ if (argv.s !== undefined && argv.s !== true){
 //List save files if -l flag is specified
 if (argv.l != undefined) {
   fs.readdir(`${__dirname}/../data/`, (err, files) => {
-     console.log(files); 
+     files.forEach(element => {console.log(element)
+    }); 
 })};
