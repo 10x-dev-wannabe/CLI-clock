@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const fs = require('node:fs');
+const readLine = require('readline-sync');
 
 var argv = require('yargs/yargs')(process.argv.slice(2))
   .option('k', {
@@ -16,7 +17,7 @@ var argv = require('yargs/yargs')(process.argv.slice(2))
     "describe" : "save time to a file specified after flag"
   })
   .option('l', {
-    "describe" : "list all save files"
+    "describe" : "list all save files, add file name to print file data"
   })
   .argv;
 
@@ -43,7 +44,6 @@ function formatAndPrintHMS(time) {
 
 function HMStoSeconds(hhmmss) {
   hms = String(hhmmss).split(":").map(Number); 
-  console.log(hms);
   s = hms[0]*3600+hms[1]*60+hms[2];
   return s;
 }
@@ -83,8 +83,8 @@ if (argv.t === true) {
     formatAndPrintHMS(t); 
     if (t <= 0) {
       clearInterval(clock);
-      console.log('\n') 
-      console.log(Date()) 
+      console.log('\n');
+      console.log(Date());
 }}, 1000)};
 
 
@@ -94,30 +94,35 @@ if (argv.s !== undefined && argv.s !== true){
     try {
       file = fs.readFileSync(`${__dirname}/../data/${argv.s}.json`); 
       file = JSON.parse(file);
-      console.log(`\n writing to file "${argv.s}"`)
+      console.log(`\n writing to file "${argv.s}"`);
     } catch {
       console.log(`\n no file named "${argv.s}" found.`);
       console.log(`creating new file.`) 
       file = [];
-    }
+    };
 
     a = new Date();
-    date = `${a.getDate()}/${a.getMonth()+1}/${a.getFullYear()}@${a.getHours()}:${a.getMinutes()}`;
+    date = `${a.getDate()}/${a.getMonth()+1}/${a.getFullYear()}@${a.getHours()}:${(a.getMinutes() < 10) ? "0" + a.getMinutes() : a.getMinutes()}`;
     try {
       total = formatAndPrintHMS(HMStoSeconds(file.at(-1).Total) + time);
     } catch {
-      total = `00:00:${time}`;
-    }
+      total = formatAndPrintHMS(time);
+    };
     file.push({Date: date, Total: total, Time: formatAndPrintHMS(time)});
-    fs.writeFileSync(`${__dirname}/../data/${argv.s}.json`, JSON.stringify(file))
-    console.log(file);
+    fs.writeFileSync(`${__dirname}/../data/${argv.s}.json`, JSON.stringify(file));
     process.exit();
   })
 };
 
 //List save files if -l flag is specified
 if (argv.l != undefined) {
-  fs.readdir(`${__dirname}/../data/`, (err, files) => {
-     files.forEach(element => {console.log(element)
-    }); 
-})};
+  if (argv.l === true) {
+    console.log('List of save files:');
+    fs.readdir(`${__dirname}/../data/`, (err, files) => {
+      files.forEach(element => {console.log(element);
+    });
+  })} else {
+    file = JSON.parse(fs.readFileSync(`${__dirname}/../data/${argv.l}.json`));
+    console.log(file);
+  }
+};
