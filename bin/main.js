@@ -3,6 +3,7 @@
 const fs = require('node:fs');
 const readLine = require('readline-sync');
 
+
 var argv = require('yargs/yargs')(process.argv.slice(2))
   .option('k', {
     "describe" : "sipmle chronometer"
@@ -52,7 +53,7 @@ console.log(Date());
 
 //chronometer function
 if (argv.k === true) {
-  let clock = setInterval(() => {
+  let chronometer = setInterval(() => {
     t += 1;
     time = t;
     formatAndPrintHMS(t);
@@ -126,3 +127,5 @@ if (argv.l != undefined) {
     console.log(file);
   }
 };
+
+
