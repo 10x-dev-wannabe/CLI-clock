@@ -28,7 +28,6 @@ let m;
 let s;
 let time;
 
-console.log(argv)
 
 function formatAndPrintHMS(time) {
     h = Math.trunc(time/3600);
